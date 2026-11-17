@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#2b1d0c">
+  <title>A Little Birthday Magic ✨</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Architects+Daughter&display=swap" rel="stylesheet">
+  <style>
+    :root{--paper:#f4ebd0;--border:#8c6239;--red:#740001;--gold:#dda832;--dark:#2c1d0c}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{min-height:100vh;background:radial-gradient(circle,#3d2812 0%,#1a1107 100%);font-family:'Playfair Display',serif;color:var(--dark);display:flex;justify-content:center;align-items:center;padding:10px}
+    button,textarea{font:inherit}
+    .phone-frame{width:100%;max-width:420px;height:min(850px,calc(100dvh - 20px));min-height:560px;position:relative;overflow:hidden;display:flex;flex-direction:column;background-color:var(--paper);background-image:url('https://www.transparenttextures.com/patterns/aged-paper.png');border:8px solid var(--border);border-radius:24px;box-shadow:0 20px 50px #000b,inset 0 0 40px #7850284d}
+    .corner{position:absolute;width:48px;height:48px;opacity:.35;pointer-events:none;z-index:10;background:#5a3d1e;clip-path:polygon(0 0,100% 0,0 100%)}
+    .top-left{top:0;left:0}.top-right{top:0;right:0;transform:rotate(90deg)}.bottom-left{bottom:0;left:0;transform:rotate(-90deg)}.bottom-right{bottom:0;right:0;transform:rotate(180deg)}
+    .screen{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;align-items:center;gap:12px;padding:38px 22px 28px;overflow-y:auto;opacity:0;visibility:hidden;pointer-events:none;transform:translateX(12px);transition:opacity .35s,transform .35s,visibility .35s;z-index:1}
+    .screen.active{opacity:1;visibility:visible;pointer-events:auto;transform:translateX(0);z-index:5}
+    h1,h2,.handwriting{font-family:'Architects Daughter',cursive;color:var(--red);text-align:center}
+    .question-title{font-size:1.5rem;line-height:1.4;margin-top:8px;text-shadow:1px 1px #fff9}
+    .character-container{width:220px;height:220px;max-width:100%;display:flex;justify-content:center;align-items:center;margin:8px 0;filter:drop-shadow(0 8px 12px #0003);animation:floatChar 3s ease-in-out infinite}
+    .character-container img{display:block;max-width:100%;max-height:100%;width:100%;height:100%;object-fit:contain}
+    @keyframes floatChar{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+    .btn-group{display:flex;gap:20px;justify-content:center;align-items:center;width:100%;min-height:60px;position:relative;margin-top:10px}
+    .btn{background:var(--red);color:white;font-family:'Cinzel',serif;font-weight:700;font-size:1rem;padding:12px 30px;border:2px solid #4a0001;border-radius:30px;cursor:pointer;box-shadow:0 4px 10px #0004;transition:transform .2s,background .2s}
+    .btn:hover{transform:scale(1.05);background:#8c0102}.btn-no{background:#555;border-color:#333}
+    .menu-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:100%;margin:10px 0;justify-items:center}
+    .menu-item{background:#fff8e6b8;border:2px dashed var(--border);border-radius:16px;width:100%;max-width:145px;height:105px;display:flex;flex-direction:column;justify-content:center;align-items:center;cursor:pointer;transition:.2s;box-shadow:0 3px 6px #0002;color:var(--dark)}
+    .menu-item:hover{transform:scale(1.05);background:#fff;border-color:var(--red)}.menu-icon{font-size:2rem;margin-bottom:4px}.menu-label{font-size:.78rem;font-family:'Cinzel',serif;font-weight:700}
+    .nav-footer{display:flex;justify-content:space-between;width:100%;margin-top:10px;align-items:center;gap:12px}.nav-link{font-family:'Cinzel',serif;font-weight:700;font-size:.85rem;color:var(--red);cursor:pointer;text-decoration:underline;background:none;border:0}
+    .memories-header{font-family:'Cinzel',serif;font-size:1.55rem;color:#1a4f75;font-weight:900;text-align:center}
+    .search-bar{background:#fff;border:1px solid #dfe1e5;border-radius:24px;padding:9px 16px;width:100%;font-size:.85rem;color:#555;margin-bottom:4px;display:flex;justify-content:space-between;box-shadow:0 2px 5px #0001}
+    .photo-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%;margin:4px 0}
+    .photo-slot{aspect-ratio:1;background:#e8e1d2;border:2px dashed #a99475;border-radius:8px;display:flex;justify-content:center;align-items:center;overflow:hidden;position:relative}
+    .photo-slot img{width:100%;height:100%;object-fit:cover;display:block}.photo-slot .empty{font-size:1.4rem;color:#78909c}
+    .tabs-header{display:flex;gap:7px;width:100%;margin-bottom:0}.tab-btn{flex:1;background:#e0d0b0;border:1px solid var(--border);padding:9px 4px;font-family:'Cinzel',serif;font-weight:700;font-size:.78rem;border-radius:8px 8px 0 0;cursor:pointer;color:var(--dark)}.tab-btn.active{background:#fff8e8;color:var(--red);border-bottom:2px solid #fff8e8}
+    .notes-container{width:100%;display:flex;flex-direction:column;flex:1;min-height:260px}.note-content-box{background:#fff8e8;border:1px solid var(--border);border-radius:0 8px 8px 8px;flex:1;padding:18px;margin-bottom:12px;box-shadow:inset 0 0 10px #0000000d;display:flex;flex-direction:column;justify-content:center;min-height:220px}
+    .note-heading{font-family:'Cinzel',serif;color:var(--red);font-size:1rem;text-align:center;margin-bottom:14px}.note-text{font-size:1.08rem;line-height:1.8;text-align:center;white-space:pre-wrap}
+    .music-player-card{background:linear-gradient(135deg,#fff3d6,#fae1b6);border:2px solid var(--border);border-radius:16px;padding:18px 15px;width:100%;box-shadow:0 4px 12px #0002;display:flex;flex-direction:column;gap:13px;align-items:center}
+    .vinyl-record{width:100px;height:100px;background:repeating-radial-gradient(circle,#171717 0 5px,#292929 6px 7px);border-radius:50%;border:4px dashed #444;display:flex;justify-content:center;align-items:center;box-shadow:0 4px 8px #0005}.vinyl-record.spinning{animation:spin 4s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.vinyl-center{width:32px;height:32px;background:var(--red);border-radius:50%;border:2px solid var(--gold)}
+    .track-title{font-family:'Cinzel',serif;font-size:.9rem;font-weight:700;color:#5a3d1e;text-align:center}.audio-controls{display:flex;align-items:center;gap:12px;justify-content:center;width:100%}.play-btn{background:var(--red);color:white;border:0;width:46px;height:46px;border-radius:50%;font-size:1.1rem;cursor:pointer;display:grid;place-items:center;box-shadow:0 2px 6px #0003}.music-hint{font-size:.75rem;color:#6b563c;text-align:center}
+    .wish-text{font-family:'Architects Daughter',cursive;font-size:1.3rem;line-height:1.55;text-align:center;color:var(--red)}
+    .small-note{font-size:.75rem;color:#715b3d;text-align:center}
+    @media(max-height:650px){.screen{padding-top:22px;padding-bottom:18px;gap:7px}.character-container{height:165px;width:165px}.screen h1.question-title{font-size:1.25rem}}
+  </style>
+</head>
+<body>
+  <main class="phone-frame" aria-label="Birthday surprise">
+    <div class="corner top-left"></div><div class="corner top-right"></div><div class="corner bottom-left"></div><div class="corner bottom-right"></div>
+
+    <!-- SCREEN 1: WELCOME -->
+    <section class="screen active" id="screen-1">
+      <h1 class="question-title">Hey! I made something for you<br>do you wanna see it?</h1>
+      <div class="character-container"><img src="harry-opening.jpg" alt="Harry Potter holding his wand"></div>
+      <div class="btn-group">
+        <button class="btn" onclick="goToScreen('screen-3')">Yes</button>
+        <button class="btn btn-no" id="no-btn-1" onclick="goToScreen('screen-2')" onmouseenter="dodgeBtn()" ontouchstart="dodgeBtn(event)">No</button>
+      </div>
+    </section>
+
+    <!-- SCREEN 2: HMMPH -->
+    <section class="screen" id="screen-2">
+      <h1 class="question-title">SERIOUSLY!?<br>How dare you, hmph!</h1>
+      <div class="character-container"><img src="hmph.png" alt="Angry Harry Potter saying Hmph"></div>
+      <button class="btn" onclick="goToScreen('screen-1')">Go back</button>
+    </section>
+
+    <!-- SCREEN 3: HAPPY HARRY -->
+    <section class="screen" id="screen-3">
+      <h1 class="question-title" style="color:#2e7d32">That's a good Gurlll 🌻</h1>
+      <div class="character-container"><img src="hedwig.png" alt="Happy Harry holding Hedwig the owl"></div>
+      <button class="btn" onclick="goToScreen('screen-4')">Click</button>
+    </section>
+
+    <!-- SCREEN 4: MAIN MENU -->
+    <section class="screen" id="screen-4">
+      <h1 style="font-size:2rem;margin-top:8px">HAPPPY BIRTHDAY</h1>
+      <div class="character-container" style="height:155px;width:190px;margin:0"><img src="hedwig.png" alt="Harry and Hedwig"></div>
+      <p class="handwriting" style="font-size:.95rem;color:#5a3d1e">Click on each item to open</p>
+      <div class="menu-grid">
+        <button class="menu-item" onclick="goToScreen('screen-memories')"><span class="menu-icon">📸</span><span class="menu-label">Memories</span></button>
+        <button class="menu-item" onclick="goToScreen('screen-notes')"><span class="menu-icon">💌</span><span class="menu-label">Notes</span></button>
+        <button class="menu-item" onclick="goToScreen('screen-music')"><span class="menu-icon">📼</span><span class="menu-label">Music</span></button>
+        <button class="menu-item" onclick="goToScreen('screen-wish')"><span class="menu-icon">✨</span><span class="menu-label">Wishes</span></button>
+      </div>
+      <div class="nav-footer"><span></span><button class="nav-link" onclick="goToScreen('screen-wish')">Next &gt;</button></div>
+    </section>
+
+    <!-- SCREEN 5: MEMORIES -->
+    <section class="screen" id="screen-memories">
+      <h2 class="memories-header">Memories</h2>
+      <div class="search-bar"><span>🔍 Moments of us ❤️</span><span>📷</span></div>
+      <div class="photo-grid">
+        <div class="photo-slot"><img src="memory1.jpg" alt="Memory 1" onerror="this.remove();this.parentElement.innerHTML='<span class=&quot;empty&quot;>＋</span>'"></div>
+        <div class="photo-slot"><img src="memory2.jpg" alt="Memory 2" onerror="this.remove();this.parentElement.innerHTML='<span class=&quot;empty&quot;>＋</span>'"></div>
+        <div class="photo-slot"><img src="memory3.jpg" alt="Memory 3" onerror="this.remove();this.parentElement.innerHTML='<span class=&quot;empty&quot;>＋</span>'"></div>
+        <div class="photo-slot"><img src="memory4.jpg" alt="Memory 4" onerror="this.remove();this.parentElement.innerHTML='<span class=&quot;empty&quot;>＋</span>'"></div>
+        <div class="photo-slot"><img src="memory5.jpg" alt="Memory 5" onerror="this.remove();this.parentElement.innerHTML='<span class=&quot;empty&quot;>＋</span>'"></div>
+        <div class="photo-slot"><span class="empty">✨</span></div>
+      </div>
+      <p class="small-note">Five little moments, kept close ❤️</p>
+      <div class="nav-footer"><button class="nav-link" onclick="goToScreen('screen-4')">&lt; Back</button><button class="nav-link" onclick="goToScreen('screen-notes')">Next &gt;</button></div>
+    </section>
+
+    <!-- SCREEN 6: THREE PROMISES -->
+    <section class="screen" id="screen-notes">
+      <div class="notes-container">
+        <div class="tabs-header">
+          <button class="tab-btn active" id="tab-1" onclick="switchNote(1)">Note 1</button>
+          <button class="tab-btn" id="tab-2" onclick="switchNote(2)">Note 2</button>
+          <button class="tab-btn" id="tab-3" onclick="switchNote(3)">Note 3</button>
+        </div>
+        <div class="note-content-box" aria-live="polite">
+          <div class="note-heading" id="note-heading">Promise 1</div>
+          <p class="note-text" id="note-text">I am always here for you never leaving you</p>
+        </div>
+      </div>
+      <div class="nav-footer"><button class="nav-link" onclick="goToScreen('screen-4')">&lt; Back</button><button class="nav-link" onclick="goToScreen('screen-music')">Next &gt;</button></div>
+    </section>
+
+    <!-- SCREEN 7: MUSIC -->
+    <section class="screen" id="screen-music">
+      <h2 style="font-size:1.4rem;margin-bottom:5px">SALVATORE ✨</h2>
+      <div class="music-player-card">
+        <div class="vinyl-record" id="vinyl"><div class="vinyl-center"></div></div>
+        <div class="track-title">Lana Del Rey — Salvatore</div>
+        <div class="audio-controls"><button class="play-btn" id="play-pause-btn" onclick="toggleAudio()" aria-label="Play music">▶</button></div>
+        <p class="music-hint" id="music-status">Tap play to listen</p>
+      </div>
+      <div class="character-container" style="height:145px;width:165px"><img src="harry-opening.jpg" alt="Harry Potter"></div>
+      <audio id="bg-audio" loop preload="none"><source src="salvatore.mp3" type="audio/mpeg">Your browser does not support audio.</audio>
+      <div class="nav-footer"><button class="nav-link" onclick="goToScreen('screen-4')">&lt; Back</button><button class="nav-link" onclick="goToScreen('screen-wish')">Next &gt;</button></div>
+    </section>
+
+    <!-- SCREEN 8: WISHES -->
+    <section class="screen" id="screen-wish">
+      <h1 class="wish-text">May all the good things you've been waiting for finally find you this year 💌</h1>
+      <div class="character-container" style="height:220px"><img src="hedwig.png" alt="Harry Potter with Hedwig"></div>
+      <p class="handwriting" style="font-size:1rem">Have the most magical birthday! ✨</p>
+      <div class="nav-footer"><button class="nav-link" onclick="goToScreen('screen-4')">&lt; Back to Home</button><span></span></div>
+    </section>
+  </main>
+
+  <script>
+    function goToScreen(id){
+      document.querySelectorAll('.screen').forEach(screen=>screen.classList.remove('active'));
+      const target=document.getElementById(id);
+      if(target){target.classList.add('active');target.scrollTop=0;}
+    }
+
+    function dodgeBtn(event){
+      const button=document.getElementById('no-btn-1');
+      const group=button.parentElement;
+      const maxX=Math.max(0,group.clientWidth-button.offsetWidth-8);
+      const maxY=35;
+      button.style.position='absolute';
+      button.style.left=Math.floor(Math.random()*maxX)+'px';
+      button.style.top=(Math.floor(Math.random()*maxY)-8)+'px';
+      if(event) event.preventDefault();
+    }
+
+    const promises=[
+      {heading:'Promise 1',text:'I am always here for you never leaving you'},
+      {heading:'Promise 2',text:'Your are my fav person always wanna talk to you\nNever gonna make you feel unwanted'},
+      {heading:'Promise 3',text:'Never gonna make you hurt bcz of me'}
+    ];
+    function switchNote(number){
+      document.querySelectorAll('.tab-btn').forEach((tab,index)=>tab.classList.toggle('active',index===number-1));
+      document.getElementById('note-heading').textContent=promises[number-1].heading;
+      document.getElementById('note-text').textContent=promises[number-1].text;
+    }
+
+    const audio=document.getElementById('bg-audio');
+    const playButton=document.getElementById('play-pause-btn');
+    const vinyl=document.getElementById('vinyl');
+    const musicStatus=document.getElementById('music-status');
+    async function toggleAudio(){
+      if(audio.paused){
+        try{await audio.play();playButton.textContent='Ⅱ';vinyl.classList.add('spinning');musicStatus.textContent='Now playing Salvatore';}
+        catch(error){musicStatus.textContent='Could not play. Check salvatore.mp3';}
+      }else{audio.pause();playButton.textContent='▶';vinyl.classList.remove('spinning');musicStatus.textContent='Music paused';}
+    }
+    audio.addEventListener('ended',()=>{playButton.textContent='▶';vinyl.classList.remove('spinning');});
+    audio.addEventListener('error',()=>{musicStatus.textContent='Add your song as salvatore.mp3';});
+  </script>
+</body>
+</html>
